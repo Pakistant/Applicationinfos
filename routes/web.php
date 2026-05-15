@@ -63,7 +63,7 @@ Route::middleware('auth')->group(function () {
 
 Route::resource('/category', CategoryController::class)->middleware('Admin');
 // partie article
-Route::resource('/article', ArticleController::class);
+Route::resource('/article', ArticleController::class)->middleware('auth');
 
 // partie user
 Route::resource('/author', UserController::class)->middleware('Admin');
@@ -73,12 +73,12 @@ Route::resource('/social', App\Http\Controllers\SocialMediaController::class)->m
 
 // partie commentaire
 
-Route::resource('/comment', CommentController::class);
-Route::put('comment/unlock/{id}',[CommentController::class, 'unlock'])->name('comment.unlock');
+Route::resource('/comment', CommentController::class)->middleware('auth');
+Route::put('comment/unlock/{id}',[CommentController::class, 'unlock'])->middleware('auth')->name('comment.unlock');
 
 // partie gestion des contact cote admin
 
-Route::resource('/contact', ContactController::class);
+Route::resource('/contact', ContactController::class)->middleware(['auth', 'Admin']);
 
 
 // partie parametre

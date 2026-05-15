@@ -15,12 +15,10 @@ class FrontcontactController extends Controller
 
     public function contact(StorecontactRequest $request){
 
-        $request->validated($request->all());
+        $data = $request->validated();
+        contact::create($data);
 
-        contact::create($request->all());
-
-
-        return back()->with('success','Message envoyer avec success nous vous recontacterons bientot');
+        return back()->with('success','Message envoyé avec succès, nous vous recontacterons bientôt');
     
     
     }

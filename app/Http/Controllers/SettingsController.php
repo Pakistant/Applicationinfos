@@ -15,44 +15,40 @@ class SettingsController extends Controller
         ['settings'=>Settings::where('id',1)->first()]);
     }
 
-    public function update(SettingsRequest $request){
+    public function update(SettingsRequest $request)
+    {
+        $data = $request->validated();
 
+        $settings = Settings::first();
+        $logoPath = $settings?->logo;
 
-        $request->validated($request->all());
-
-        
-
-    $logo=$request->logo;
-
-    $settings=Settings::where('id',1)->first();
-    
-    if($logo!=null && !$logo->getError()){
-
-        if($settings->logo){
-         Storage::disk('public')->delete($settings->image);
+        if ($request->hasFile('logo') && $request->file('logo')->isValid()) {
+            if ($logoPath) {
+                Storage::disk('public')->delete($logoPath);
+            }
+            $logoPath = $request->file('logo')->store('asset', 'public');
         }
-        $logo=$request->image->store('asset','public');
-    }
 
-    if(!$settings){
-    
-    
-      $settings=settings::create([
+        if (! $settings) {
+            Settings::create([
+                'web_site_name' => $data['web_site_name'],
+                'logo' => $logoPath,
+                'address' => $data['address'],
+                'phone' => $data['phone'],
+                'email' => $data['email'],
+                'about' => $data['about'],
+            ]);
+        } else {
+            $settings->update([
+                'web_site_name' => $data['web_site_name'],
+                'logo' => $logoPath,
+                'address' => $data['address'],
+                'phone' => $data['phone'],
+                'email' => $data['email'],
+                'about' => $data['about'],
+            ]);
+        }
 
-        'web_site_name' => $request->web_site_name,
-        'logo' => $logo,
-        'address' => $request->address,
-        'phone' => $request->phone,
-        'email' => $request->email,
-        'about' => $request->about,
-    
-    ]);
-    }
-    
-   
-     
-     return back()->with('success', 'Parametre modifier avec sur success  ');
-      
-    
+        return back()->with('success', 'Paramètre modifié avec succès');
     }
 }

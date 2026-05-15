@@ -106,9 +106,7 @@ class ArticleController extends Controller
    // dd($article);
     $data = $request->validated();
 
-    
-
-    $image = null;
+    $image = $article->image;
     if ($request->hasFile('image') && $request->file('image')->isValid()) {
         if ($article->image) {
             Storage::disk('public')->delete($article->image);
@@ -125,7 +123,7 @@ class ArticleController extends Controller
         'isActive'    => $data['isActive'],
         'isComment'   => $data['isComment'],
         'isSharable'  => $data['isSharable'],
-        'image'       => $image , //?? $article->image,  // ✅ garde l'ancienne image si pas remplacée
+        'image'       => $image,
         'category_id' => $data['category_id'],
     ]);
 

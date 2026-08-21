@@ -1,0 +1,6 @@
+@extends('Front.app')
+@section('title', 'Kiosque — ActuInfos')
+@section('Main_section')
+  <p class="eyebrow">Éditions numériques</p><h1 class="section-heading" style="font-size:2.4rem">Le kiosque</h1><p class="text-muted mb-4">Consultez les journaux publiés par la rédaction.</p>
+  @if($issues->isNotEmpty())<div class="story-grid">@foreach($issues as $issue)<article class="story-card"><a class="story-image" href="{{ route('kiosk.show', $issue) }}">@if($issue->coverUrl())<img src="{{ $issue->coverUrl() }}" alt="Couverture de {{ $issue->title }}">@else<div class="d-flex align-items-center justify-content-center h-100 bg-dark text-white"><i class="far fa-file-pdf fa-3x"></i></div>@endif</a><div class="story-body"><span class="article-category">Journal</span><h2><a href="{{ route('kiosk.show', $issue) }}">{{ $issue->title }}</a></h2><p>Édition publiée le {{ $issue->created_at->isoFormat('D MMMM YYYY') }}.</p><a class="btn-brand" href="{{ route('kiosk.show', $issue) }}">Consulter <i class="fas fa-arrow-right ml-2"></i></a></div></article>@endforeach</div>@else<div class="empty-state"><i class="far fa-newspaper"></i><p>Le kiosque ne contient encore aucune édition.</p></div>@endif
+@endsection

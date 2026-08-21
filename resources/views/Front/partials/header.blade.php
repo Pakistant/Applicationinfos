@@ -42,6 +42,7 @@
       @foreach($publicCategories as $category)
         <a class="{{ request()->routeIs('category.article') && request()->route('slug') === $category->slug ? 'active' : '' }}" href="{{ route('category.article', $category->slug) }}">{{ $category->name }}</a>
       @endforeach
+      <a class="{{ request()->routeIs('kiosk.*') ? 'active' : '' }}" href="{{ route('kiosk.public') }}">Kiosque</a>
       <a class="{{ request()->routeIs('contact.front') ? 'active' : '' }}" href="{{ route('contact.front') }}">Contact</a>
       <form class="search-form" action="{{ route('search') }}" method="GET" role="search">
         <input type="search" name="search_key" value="{{ request('search_key') }}" placeholder="Rechercher" aria-label="Rechercher un article">

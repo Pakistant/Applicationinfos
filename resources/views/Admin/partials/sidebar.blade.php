@@ -19,6 +19,13 @@
                   <li><a href="{{route('article.create')}}"> Ajouter un article </a></li>
                 </ul>
               </li>
+              <li class="submenu">
+                <a href="#"><i class="fas fa-newspaper"></i> <span> Kiosque </span><span class="menu-arrow"></span></a>
+                <ul class="submenu_class" style="display: none">
+                  <li><a href="{{ route('kiosk.index') }}">Tous les journaux</a></li>
+                  <li><a href="{{ route('kiosk.create') }}">Ajouter un journal</a></li>
+                </ul>
+              </li>
               <li>
                 <a href="{{route('comment.index')}}"
                   ><i class="fe fe-table"></i> <span>Commentaires</span></a

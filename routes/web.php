@@ -15,6 +15,7 @@ use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SocialMediaController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\KioskIssueController;
 
 
 use Illuminate\Support\Facades\Route;
@@ -52,6 +53,8 @@ Route::post('/contact/envoyer', [FrontcontactController::class, 'contact'])->nam
 // partie recherche
 Route::match(['get', 'post'], '/recherche', [SearchController::class, 'index'])->name('search');
 Route::get('/tag/{tag}', [TagController::class, 'index'])->name('tag.articles');
+Route::get('/kiosque', [KioskIssueController::class, 'publicIndex'])->name('kiosk.public');
+Route::get('/kiosque/{kiosk}', [KioskIssueController::class, 'show'])->name('kiosk.show');
 
 Route::get('/dashboard', [DashboardController::class , 'index'])->middleware(['auth', 'auth.session', 'verified','checkRole:admin,author'])->name('dashboard');
 
@@ -66,6 +69,7 @@ Route::middleware(['auth', 'auth.session'])->group(function () {
 Route::resource('/category', CategoryController::class)->middleware(['auth', 'auth.session', 'Admin']);
 // partie article
 Route::resource('/article', ArticleController::class)->middleware(['auth', 'auth.session']);
+Route::resource('/gestion/kiosque', KioskIssueController::class)->except(['show'])->parameters(['kiosque' => 'kiosk'])->names('kiosk')->middleware(['auth', 'auth.session', 'Admin']);
 
 // partie user
 Route::resource('/author', UserController::class)->middleware(['auth', 'auth.session', 'Admin']);

@@ -10,9 +10,9 @@ class SettingsController extends Controller
 {
     public function index()
     {
-        return view('Admin.settings.index',
-
-        ['settings'=>Settings::where('id',1)->first()]);
+        return view('Admin.settings.index', [
+            'settings' => Settings::first(),
+        ]);
     }
 
     public function update(SettingsRequest $request)

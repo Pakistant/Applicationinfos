@@ -23,8 +23,8 @@ class StoreCommentRequest extends FormRequest
     {
         return [
         'name'=>['required','string'],
-        'email'=>['required','string'],
-        'web_site'=>['nullable','string'],
+        'email'=>['required','email'],
+        'web_site'=>['nullable','url'],
         'message'=>['required','string']
         ];
     }

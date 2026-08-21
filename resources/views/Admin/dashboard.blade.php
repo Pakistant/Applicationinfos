@@ -1,203 +1,162 @@
 @extends('Admin.app')
-@yield('title',"Dashboard-accueil")
+@section('title', 'Tableau de bord')
 
 @section('dashboard-header')
-
-<div class="row">
-    <div class="col-sm-12 mt-5">
-                <h3 class="page-title mt-3">Hello, {{Auth::User()->name}}!</h3>
-                <ul class="breadcrumb">
-                  <li class="breadcrumb-item active">Dashboard</li>
-                </ul>
+  <div class="row align-items-center">
+    <div class="col-sm-8">
+      <p class="text-muted mb-1">{{ $isAdmin ? 'Pilotage de la plateforme' : 'Votre espace éditorial' }}</p>
+      <h3 class="page-title mt-0">Bonjour, {{ Auth::user()->name }}</h3>
     </div>
-</div>
-
+    <div class="col-sm-4 text-sm-right">
+      <span class="badge badge-pill {{ $isAdmin ? 'badge-primary' : 'badge-info' }} px-3 py-2">
+        <i class="fas {{ $isAdmin ? 'fa-shield-alt' : 'fa-pen-nib' }} mr-1"></i>
+        {{ $isAdmin ? 'Administrateur' : 'Auteur' }}
+      </span>
+    </div>
+  </div>
 @endsection
 
 @section('dashboard-content')
-
- <div class="row">
-            <div class="col-xl-3 col-sm-6 col-12">
-              <div class="card board1 fill">
-                <div class="card-body">
-                  <div class="dash-widget-header">
-                    <div>
-                      <h3 class="card_widget_header">{{ Auth::user()->role == 'author' ? $author_articles : $articles->count()}}</h3>
-                      <h6 class="text-muted">Total Articles</h6>
-                    </div>
-                    <div class="ml-auto mt-md-3 mt-lg-0">
-                      <span class="opacity-7 text-muted"
-                        ><svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewbox="0 0 24 24"
-                          fill="none"
-                          stroke="#009688"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          class="feather feather-user-plus"
-                        >
-                          <path
-                            d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"
-                          ></path>
-                          <circle cx="8.5" cy="7" r="4"></circle>
-                          <line x1="20" y1="8" x2="20" y2="14"></line>
-                          <line x1="23" y1="11" x2="17" y2="11"></line></svg>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+  <div class="row">
+    <div class="col-xl-3 col-sm-6 col-12">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <p class="text-muted mb-2">Articles</p>
+              <h2 class="mb-1">{{ $totalArticles }}</h2>
+              <small class="text-muted">{{ $publishedArticles }} publié(s)</small>
             </div>
-            <div class="col-xl-3 col-sm-6 col-12">
-              <div class="card board1 fill">
-                <div class="card-body">
-                  <div class="dash-widget-header">
-                    <div>
-                      <h3 class="card_widget_header">{{$categories}}</h3>
-                      <h6 class="text-muted">Total Catégories</h6>
-                    </div>
-                    <div class="ml-auto mt-md-3 mt-lg-0">
-                      <span class="opacity-7 text-muted"
-                        ><svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewbox="0 0 24 24"
-                          fill="none"
-                          stroke="#009688"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          class="feather feather-dollar-sign"
-                        >
-                          <line x1="12" y1="1" x2="12" y2="23"></line>
-                          <path
-                            d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"
-                          ></path></svg
-                      ></span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-xl-3 col-sm-6 col-12">
-              <div class="card board1 fill">
-                <div class="card-body">
-                  <div class="dash-widget-header">
-                    <div>
-                      <h3 class="card_widget_header">1538</h3>
-                      <h6 class="text-muted">Total Commentaires</h6>
-                    </div>
-                    <div class="ml-auto mt-md-3 mt-lg-0">
-                      <span class="opacity-7 text-muted"
-                        ><svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewbox="0 0 24 24"
-                          fill="none"
-                          stroke="#009688"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          class="feather feather-file-plus"
-                        >
-                          <path
-                            d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
-                          ></path>
-                          <polyline points="14 2 14 8 20 8"></polyline>
-                          <line x1="12" y1="18" x2="12" y2="12"></line>
-                          <line x1="9" y1="15" x2="15" y2="15"></line></svg
-                      ></span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-xl-3 col-sm-6 col-12">
-              <div class="card board1 fill">
-                <div class="card-body">
-                  <div class="dash-widget-header">
-                    <div>
-                      <h3 class="card_widget_header">364</h3>
-                      <h6 class="text-muted">Abonnements</h6>
-                    </div>
-                    <div class="ml-auto mt-md-3 mt-lg-0">
-                      <span class="opacity-7 text-muted"
-                        ><svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewbox="0 0 24 24"
-                          fill="none"
-                          stroke="#009688"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          class="feather feather-globe"
-                        >
-                          <circle cx="12" cy="12" r="10"></circle>
-                          <line x1="2" y1="12" x2="22" y2="12"></line>
-                          <path
-                            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
-                          ></path></svg
-                      ></span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <span class="text-primary"><i class="fas fa-newspaper fa-lg"></i></span>
           </div>
+          <a href="{{ route('article.index') }}" class="small d-inline-block mt-3">Gérer les articles <i class="fas fa-arrow-right ml-1"></i></a>
+        </div>
+      </div>
+    </div>
 
-          <div class="row">
-            <div class="col-md-12 d-flex">
-              <div class="card card-table flex-fill">
-                <div class="card-header">
-                  <h4 class="card-title float-left mt-2">Articles recents</h4>
-                  <a
-                    href="{{route('article.index')}}"
-                    class="btn btn-primary float-right veiwbutton"
-                  >
-                    Voir tous
-                   </a>
-                </div>
-                <div class="card-body">
-                  <div class="table-responsive">
-                    <table class="table table-hover table-center">
-                      <thead>
-                        <tr>
-                          <th>Image</th>
-                          <th>Titre</th>
-                          <th>Catégories</th>
-                          <th class="text-right">Auteur</th>
-                          <th class="text-center">Publication</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-
-                      @foreach ($articles_recent as $article_recent )
-                        <tr>
-                          <td class="text-nowrap">
-                            <img src="{{$article_recent->imageUrl()}}" alt="image des articles recent" width="100" height="100">
-                          </td>
-                         
-                          <td>{{ $article_recent-> title}}</td>
-                          <td>{{ $article_recent->category->name}}</td>
-                          <td class="text-center">{{ $article_recent->author->name}}</td>
-                          <td class="text-center" <span class="badge badge-pill bg-success inv-badge">PUBLIE</span></td>
-                        </tr>
-                      @endforeach
-                        
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
+    <div class="col-xl-3 col-sm-6 col-12">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <p class="text-muted mb-2">Brouillons</p>
+              <h2 class="mb-1">{{ $draftArticles }}</h2>
+              <small class="text-muted">À finaliser</small>
             </div>
+            <span class="text-warning"><i class="fas fa-file-alt fa-lg"></i></span>
           </div>
+          <a href="{{ route('article.index') }}" class="small d-inline-block mt-3">Voir les articles <i class="fas fa-arrow-right ml-1"></i></a>
+        </div>
+      </div>
+    </div>
 
+    <div class="col-xl-3 col-sm-6 col-12">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <p class="text-muted mb-2">Commentaires</p>
+              <h2 class="mb-1">{{ $comments }}</h2>
+              <small class="text-muted">{{ $pendingComments }} en attente</small>
+            </div>
+            <span class="text-info"><i class="fas fa-comments fa-lg"></i></span>
+          </div>
+          <a href="{{ route('comment.index') }}" class="small d-inline-block mt-3">Modérer <i class="fas fa-arrow-right ml-1"></i></a>
+        </div>
+      </div>
+    </div>
 
+    <div class="col-xl-3 col-sm-6 col-12">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <p class="text-muted mb-2">{{ $isAdmin ? 'Catégories' : 'Statut' }}</p>
+              <h2 class="mb-1">{{ $isAdmin ? $categories : 'Actif' }}</h2>
+              <small class="text-muted">{{ $isAdmin ? $authors.' auteur(s)' : 'Compte éditeur' }}</small>
+            </div>
+            <span class="text-success"><i class="fas {{ $isAdmin ? 'fa-layer-group' : 'fa-check-circle' }} fa-lg"></i></span>
+          </div>
+          @if($isAdmin)
+            <a href="{{ route('category.index') }}" class="small d-inline-block mt-3">Organiser <i class="fas fa-arrow-right ml-1"></i></a>
+          @else
+            <a href="{{ route('profile.edit') }}" class="small d-inline-block mt-3">Mon profil <i class="fas fa-arrow-right ml-1"></i></a>
+          @endif
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+          <div>
+            <h4 class="card-title mb-1">Publications récentes</h4>
+            <p class="text-muted mb-0 small">Les derniers contenus de {{ $isAdmin ? 'la plateforme' : 'votre espace' }}.</p>
+          </div>
+          <a href="{{ route('article.create') }}" class="btn btn-primary btn-sm"><i class="fas fa-plus mr-1"></i>Nouvel article</a>
+        </div>
+        <div class="card-body p-0">
+          @if($articlesRecent->isNotEmpty())
+            <div class="table-responsive">
+              <table class="table table-hover mb-0">
+                <thead>
+                  <tr>
+                    <th>Titre</th>
+                    <th>Catégorie</th>
+                    @if($isAdmin)<th>Auteur</th>@endif
+                    <th>Statut</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @foreach($articlesRecent as $article)
+                    <tr>
+                      <td><a href="{{ route('article.show', $article) }}" class="font-weight-bold">{{ Str::limit($article->title, 48) }}</a><br><small class="text-muted">{{ $article->created_at->isoFormat('D MMM YYYY') }}</small></td>
+                      <td>{{ optional($article->category)->name ?? 'Sans catégorie' }}</td>
+                      @if($isAdmin)<td>{{ optional($article->author)->name ?? 'Inconnu' }}</td>@endif
+                      <td><span class="badge badge-pill {{ $article->isActive ? 'badge-success' : 'badge-secondary' }}">{{ $article->isActive ? 'Publié' : 'Brouillon' }}</span></td>
+                    </tr>
+                  @endforeach
+                </tbody>
+              </table>
+            </div>
+          @else
+            <div class="text-center py-5">
+              <i class="fas fa-newspaper fa-2x text-muted mb-3"></i>
+              <p class="text-muted mb-3">Aucun article n’a encore été créé.</p>
+              <a href="{{ route('article.create') }}" class="btn btn-outline-primary">Créer le premier article</a>
+            </div>
+          @endif
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4 mt-4 mt-lg-0">
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white"><h4 class="card-title mb-0">Accès rapides</h4></div>
+        <div class="card-body">
+          <a href="{{ route('article.create') }}" class="d-flex align-items-center text-dark mb-3"><span class="text-primary mr-3"><i class="fas fa-pen"></i></span><span>Rédiger un article</span><i class="fas fa-chevron-right ml-auto text-muted"></i></a>
+          <a href="{{ route('comment.index') }}" class="d-flex align-items-center text-dark mb-3"><span class="text-info mr-3"><i class="fas fa-comments"></i></span><span>Gérer les commentaires</span><i class="fas fa-chevron-right ml-auto text-muted"></i></a>
+          @if($isAdmin)
+            <a href="{{ route('category.create') }}" class="d-flex align-items-center text-dark mb-3"><span class="text-success mr-3"><i class="fas fa-folder-plus"></i></span><span>Ajouter une catégorie</span><i class="fas fa-chevron-right ml-auto text-muted"></i></a>
+            <a href="{{ route('author.create') }}" class="d-flex align-items-center text-dark mb-3"><span class="text-warning mr-3"><i class="fas fa-user-plus"></i></span><span>Ajouter un auteur</span><i class="fas fa-chevron-right ml-auto text-muted"></i></a>
+            <a href="{{ route('setting.index') }}" class="d-flex align-items-center text-dark"><span class="text-secondary mr-3"><i class="fas fa-cog"></i></span><span>Paramètres du site</span><i class="fas fa-chevron-right ml-auto text-muted"></i></a>
+          @else
+            <a href="{{ route('profile.edit') }}" class="d-flex align-items-center text-dark"><span class="text-secondary mr-3"><i class="fas fa-user-cog"></i></span><span>Modifier mon profil</span><i class="fas fa-chevron-right ml-auto text-muted"></i></a>
+          @endif
+        </div>
+      </div>
+
+      @if($isAdmin)
+        <div class="card border-0 shadow-sm">
+          <div class="card-body">
+            <p class="text-muted mb-1">Messages reçus</p>
+            <h3 class="mb-2">{{ $contacts }}</h3>
+            <a href="{{ route('contact.index') }}" class="small">Consulter les contacts <i class="fas fa-arrow-right ml-1"></i></a>
+          </div>
+        </div>
+      @endif
+    </div>
+  </div>
 @endsection

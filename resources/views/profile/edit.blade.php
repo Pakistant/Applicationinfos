@@ -95,7 +95,7 @@
                                                                 <div class="col-12 col-sm-6">
 																	<div class="form-group">
 																		<label>Photo de profile</label>
-																		<input type="file"  name="image" class="form-control" > </div>
+																		<input type="file" name="image" class="form-control" accept=".jpg,.jpeg,.png"> </div>
 																</div>
 																
 																

@@ -40,7 +40,7 @@
 												<td>LIEN-000{{$social->id}}</td>
 												<td><i class="{{$social->icon}}"></i></td>
 												<td>{{$social->name}}</td>
-												<td><a href="">{{$social->link}}</a></td>
+														<td><a href="{{$social->link}}" target="_blank" rel="noopener noreferrer">{{$social->link}}</a></td>
 												<td class="text-right">
 													<div class="dropdown dropdown-action">
 														 <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false">

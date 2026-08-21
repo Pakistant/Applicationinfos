@@ -23,7 +23,7 @@ class StorecontactRequest extends FormRequest
     {
         return [
          'name'=>['required','string'],
-        'email'=>['required','string'],
+        'email'=>['required','email'],
         'subject'=>['nullable','string'],
         'message'=>['required','string']
         ];

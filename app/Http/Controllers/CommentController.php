@@ -15,12 +15,15 @@ class CommentController extends Controller
     public function index()
     {
         $user =Auth::user();
-        $comments= Comment::wherehas('article', function($query) use ($user){
-
-            $query->where('author_id',$user->id);
-
-        
-        })->get();
+        $isAdmin = in_array('admin', explode(',', $user->role), true);
+        $comments = Comment::with('article')
+            ->when(! $isAdmin, function ($query) use ($user) {
+                $query->whereHas('article', function ($articleQuery) use ($user) {
+                    $articleQuery->where('author_id', $user->id);
+                });
+            })
+            ->latest()
+            ->get();
         
         return view('Admin.comment', compact('comments'));
     }

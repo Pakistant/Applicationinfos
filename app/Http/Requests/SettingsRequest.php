@@ -27,7 +27,7 @@ class SettingsRequest extends FormRequest
         'logo'=>['image','nullable','mimes:png,jpg,jpeg', 'max:2048'],
         'address'=>['string','nullable'],
         'phone' =>['string','nullable'],
-        'email'=>['string','nullable'],
+        'email'=>['email','nullable'],
         'about' =>['string','required'],
         ];
     }

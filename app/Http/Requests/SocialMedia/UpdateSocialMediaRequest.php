@@ -22,9 +22,9 @@ class UpdateSocialMediaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required','string'],
-            'link' => ['required','string'],
-            'icon' => ['required','string'],
+            'name' => ['required','string','max:255'],
+            'link' => ['required','url','max:2048'],
+            'icon' => ['required','string','max:100'],
         ];
     }
 }

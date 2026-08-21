@@ -50,7 +50,7 @@ class SocialMediaController extends Controller
      */
     public function edit(SocialMedia $social)
     {
-        return view('Admin.social.create', compact('social'));
+        return view('Admin.Social.create', compact('social'));
     }
 
     /**

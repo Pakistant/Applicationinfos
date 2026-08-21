@@ -10,7 +10,7 @@ class SettingsController extends Controller
 {
     public function index()
     {
-        return view('Admin.settings.index', [
+        return view('Admin.Settings.index', [
             'settings' => Settings::first(),
         ]);
     }

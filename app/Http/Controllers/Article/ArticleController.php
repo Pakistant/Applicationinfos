@@ -31,7 +31,7 @@ class ArticleController extends Controller
     }
 
 
-        return view('Admin.article.index', compact('articles'));
+        return view('Admin.Article.index', compact('articles'));
     }
 
     /**
@@ -79,7 +79,7 @@ class ArticleController extends Controller
      */
     public function show(Article $article)
     {
-         return view('Admin.article.show', compact('article'));
+         return view('Admin.Article.show', compact('article'));
     }
 
     /**
@@ -87,7 +87,7 @@ class ArticleController extends Controller
      */
     public function edit(Article $article)
     {
-        return view('Admin.article.create', [
+        return view('Admin.Article.create', [
         
             'article'=>$article,
             'categories'=> Category::where('isActive',1)->get()

@@ -24,6 +24,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if ($this->app->runningInConsole()) {
+            return;
+        }
+
         $socials = SocialMedia::orderBy('id','DESC')->get();
         $categories = Category::where('isActive',1)->orderBy('created_at', 'DESC')->get();
         $articles = Article::where('isActive',1)->orderBy('created_at','DESC')->limit(5)->get();

@@ -11,7 +11,7 @@ class DetailsController extends Controller
 {
     public function index(String $slug){
 
-        $article = Article::where('slug',$slug)->with(['comments','category','author','tags'])->first();
+        $article = Article::where('slug',$slug)->with(['comments','category','author'])->first();
         
         // Vérifier si l'article existe
         if (!$article) {
@@ -31,7 +31,7 @@ class DetailsController extends Controller
 
         $candidateArticles = Article::where('isActive',1)
             ->where('id', '!=', $article->id)
-            ->with(['category', 'author', 'tags'])
+            ->with(['category', 'author'])
             ->orderBy('created_at', 'DESC')
             ->get();
 

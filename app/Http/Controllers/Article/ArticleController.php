@@ -62,7 +62,7 @@ class ArticleController extends Controller
 
     $article=Article::create([
         'title'       => $data['title'],
-        'description' => $data['description'],
+        'description' => $this->sanitizeDescription($data['description']),
         'isActive'    => $data['isActive'],
         'isComment'   => $data['isComment'],
         'isSharable'  => $data['isSharable'],
@@ -119,7 +119,7 @@ class ArticleController extends Controller
 
     $article->update([
         'title'       => $data['title'],
-        'description' => $data['description'],
+        'description' => $this->sanitizeDescription($data['description']),
         'isActive'    => $data['isActive'],
         'isComment'   => $data['isComment'],
         'isSharable'  => $data['isSharable'],
@@ -141,5 +141,59 @@ class ArticleController extends Controller
     {
         $article->delete();
         return back()->with('success', 'Article supprimé avec succès');
+    }
+
+    private function sanitizeDescription(string $html): string
+    {
+        $allowedTags = ['p', 'br', 'strong', 'b', 'em', 'i', 'u', 's', 'ul', 'ol', 'li', 'blockquote', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'span', 'a'];
+        $document = new \DOMDocument('1.0', 'UTF-8');
+        $previous = libxml_use_internal_errors(true);
+        $document->loadHTML('<div>' . $html . '</div>', LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        libxml_clear_errors();
+        libxml_use_internal_errors($previous);
+
+        $clean = function (\DOMNode $node) use (&$clean, $allowedTags): void {
+            foreach (iterator_to_array($node->childNodes) as $child) {
+                if ($child instanceof \DOMElement) {
+                    $tag = strtolower($child->tagName);
+                    if (in_array($tag, ['script', 'style', 'iframe', 'object', 'embed'], true)) {
+                        $child->parentNode->removeChild($child);
+                        continue;
+                    }
+                    if (!in_array($tag, $allowedTags, true)) {
+                        while ($child->firstChild) {
+                            $child->parentNode->insertBefore($child->firstChild, $child);
+                        }
+                        $child->parentNode->removeChild($child);
+                        continue;
+                    }
+                    $style = $child->getAttribute('style');
+                    $href = $child->getAttribute('href');
+                    for ($index = $child->attributes->length - 1; $index >= 0; $index--) {
+                        $child->removeAttributeNode($child->attributes->item($index));
+                    }
+                    if ($style !== '') {
+                        preg_match_all('/(?:color|background-color|font-size|font-family|font-weight|font-style|text-decoration|text-align)\s*:\s*[-#(),.%\sa-zA-Z0-9]+/i', $style, $matches);
+                        if ($matches[0] !== []) {
+                            $child->setAttribute('style', implode('; ', $matches[0]));
+                        }
+                    }
+                    if ($tag === 'a' && preg_match('/^(https?:\/\/|mailto:)/i', $href)) {
+                        $child->setAttribute('href', $href);
+                        $child->setAttribute('target', '_blank');
+                        $child->setAttribute('rel', 'noopener noreferrer');
+                    }
+                    $clean($child);
+                }
+            }
+        };
+
+        $clean($document->documentElement);
+        $result = '';
+        foreach ($document->documentElement->childNodes as $child) {
+            $result .= $document->saveHTML($child);
+        }
+
+        return $result;
     }
 }

@@ -3,7 +3,7 @@
 @section('Main_section')
   <article class="article-page">
     <img class="article-cover" src="{{ $article->imageUrl() }}" alt="">
-    <div class="article-copy"><a class="article-category" href="{{ route('category.article', $article->category->slug) }}">{{ $article->category->name }}</a><h1>{{ $article->title }}</h1><div class="story-meta" style="color:var(--muted)"><span>{{ $article->created_at->isoFormat('D MMMM YYYY') }}</span><span>{{ $article->views }} lectures</span></div><p>{{ $article->description }}</p><div class="article-byline"><span>Par <strong>{{ $article->author->name }}</strong></span><span>{{ $article->comments->count() }} commentaire(s)</span></div></div>
+    <div class="article-copy"><a class="article-category" href="{{ route('category.article', $article->category->slug) }}">{{ $article->category->name }}</a><h1>{{ $article->title }}</h1><div class="story-meta" style="color:var(--muted)"><span>{{ $article->created_at->isoFormat('D MMMM YYYY') }}</span><span>{{ $article->views }} lectures</span></div><div class="article-body">{!! $article->description !!}</div><div class="article-byline"><span>Par <strong>{{ $article->author->name }}</strong></span><span>{{ $article->comments->count() }} commentaire(s)</span></div></div>
   </article>
   @if($article->isSharable)
     <section class="article-share" aria-label="Partager cet article">

@@ -11,7 +11,7 @@
               <span class="popular-kicker"><i class="fas fa-fire mr-1"></i> Les plus lus</span>
               <a class="hero-category" href="{{ route('category.article', $headline->category->slug) }}">{{ $headline->category->name }}</a>
               <h1><a href="{{ route('article.details', $headline->slug) }}">{{ $headline->title }}</a></h1>
-              <p class="hero-summary">{{ Str::limit($headline->description, 150) }}</p>
+              <p class="hero-summary">{{ Str::limit(strip_tags($headline->description), 150) }}</p>
               <div class="hero-meta"><span>{{ $headline->created_at->isoFormat('D MMMM YYYY') }}</span><span><i class="far fa-eye mr-1"></i>{{ $headline->views }} lectures</span></div>
             </div>
           </article>

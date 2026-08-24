@@ -21,7 +21,7 @@
 									<a href="blog-details.html"><img src="{{ $article->imageUrl()}}" alt="{{ $article->slug}}" class="img-fluid mt-4"></a>
 								</div>
 								<div class="blog-content mt-4">
-									<p>{{$article->description}}</p>
+									{!! $article->description !!}
 								</div>
 							</article>
 

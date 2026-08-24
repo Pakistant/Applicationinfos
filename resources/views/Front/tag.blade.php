@@ -16,7 +16,7 @@
           <div class="story-body">
             <a class="article-category" href="{{ route('category.article', $article->category->slug) }}">{{ $article->category->name }}</a>
             <h2><a href="{{ route('article.details', $article->slug) }}">{{ $article->title }}</a></h2>
-            <p>{{ Str::limit($article->description, 130) }}</p>
+            <p>{{ Str::limit(strip_tags($article->description), 130) }}</p>
             <div class="story-foot">
               <span>{{ $article->author->name }}</span>
               <span>{{ $article->created_at->isoFormat('D MMM YYYY') }}</span>

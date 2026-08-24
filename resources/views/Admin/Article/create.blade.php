@@ -78,7 +78,7 @@
 
             <div class="form-group">
               <label for="article-description">Description <span class="text-danger">*</span></label>
-              <textarea id="article-description" class="form-control @error('description') is-invalid @enderror" rows="8" name="description" placeholder="Rédigez le contenu ou le résumé de l’article..." required>{{ old('description', $article->description ?? '') }}</textarea>
+              <textarea id="article-description" class="form-control summernote @error('description') is-invalid @enderror" rows="8" name="description" placeholder="Rédigez le contenu ou le résumé de l’article..." required>{{ old('description', $article->description ?? '') }}</textarea>
               @error('description')<div class="invalid-feedback">{{ $message }}</div>@enderror
             </div>
 

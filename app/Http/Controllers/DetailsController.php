@@ -29,23 +29,31 @@ class DetailsController extends Controller
             ->limit(5)
             ->get();
 
-        $relatedArticles = Article::where('isActive',1)
+        $candidateArticles = Article::where('isActive',1)
             ->where('id', '!=', $article->id)
-            ->where(function ($query) use ($article) {
-                $query->where('category_id', $article->category_id);
-
-                if ($article->tags->isNotEmpty()) {
-                    $tagNames = $article->tags->pluck('name')->filter()->all();
-                    foreach ($tagNames as $tagName) {
-                        $query->orWhereHas('tags', function ($tagQuery) use ($tagName) {
-                            $tagQuery->where('name', $tagName);
-                        });
-                    }
-                }
-            })
+            ->with(['category', 'author', 'tags'])
             ->orderBy('created_at', 'DESC')
-            ->limit(3)
             ->get();
+
+        $articleTagNames = method_exists($article, 'tags')
+            ? $article->tags->pluck('name')->filter()->unique()->values()->all()
+            : [];
+
+        $relatedArticles = $candidateArticles->filter(function ($relatedArticle) use ($article, $articleTagNames) {
+            if ($relatedArticle->category_id === $article->category_id) {
+                return true;
+            }
+
+            if (empty($articleTagNames)) {
+                return false;
+            }
+
+            $relatedTagNames = method_exists($relatedArticle, 'tags')
+                ? $relatedArticle->tags->pluck('name')->filter()->all()
+                : [];
+
+            return !empty(array_intersect($articleTagNames, $relatedTagNames));
+        })->take(3);
 
         if ($relatedArticles->isEmpty()) {
             $relatedArticles = $recent_articles->take(3);

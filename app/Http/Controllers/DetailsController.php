@@ -35,12 +35,10 @@ class DetailsController extends Controller
             ->orderBy('created_at', 'DESC')
             ->get();
 
-        $articleTagNames = method_exists($article, 'tags')
-            ? $article->tags->pluck('name')->filter()->unique()->values()->all()
-            : [];
+        $articleTagNames = collect($article->tags ?? [])->pluck('name')->filter()->unique()->values()->all();
 
         $relatedArticles = $candidateArticles->filter(function ($relatedArticle) use ($article, $articleTagNames) {
-            if ($relatedArticle->category_id === $article->category_id) {
+            if ((int) $relatedArticle->category_id === (int) $article->category_id) {
                 return true;
             }
 
@@ -48,9 +46,7 @@ class DetailsController extends Controller
                 return false;
             }
 
-            $relatedTagNames = method_exists($relatedArticle, 'tags')
-                ? $relatedArticle->tags->pluck('name')->filter()->all()
-                : [];
+            $relatedTagNames = collect($relatedArticle->tags ?? [])->pluck('name')->filter()->all();
 
             return !empty(array_intersect($articleTagNames, $relatedTagNames));
         })->take(3);

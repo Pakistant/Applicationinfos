@@ -50,11 +50,11 @@
               <img src="{{ $related->imageUrl() }}" alt="{{ $related->title }}">
             </a>
             <div class="story-body">
-              <a class="article-category" href="{{ route('category.article', $related->category->slug) }}">{{ $related->category->name }}</a>
+              <a class="article-category" href="{{ route('category.article', optional($related->category)->slug) }}">{{ optional($related->category)->name ?? 'Actualité' }}</a>
               <h2><a href="{{ route('article.details', $related->slug) }}">{{ $related->title }}</a></h2>
-              <p>{{ Str::limit(strip_tags(html_entity_decode($related->description)), 130) }}</p>
+              <p>{{ Str::limit(strip_tags(html_entity_decode($related->description ?? '')), 130) }}</p>
               <div class="story-foot">
-                <span>{{ $related->author->name }}</span>
+                <span>{{ optional($related->author)->name ?? 'Rédaction' }}</span>
                 <span>{{ $related->created_at->isoFormat('D MMM YYYY') }}</span>
               </div>
             </div>

@@ -125,9 +125,36 @@
 
             <div class="d-flex align-items-center justify-content-between border-top pt-4 mt-2">
               <a href="{{ route('article.index') }}" class="text-muted">Annuler</a>
-              <button type="submit" class="btn btn-primary px-4">{{ isset($article) ? 'Enregistrer les modifications' : 'Publier l’article' }}</button>
+              <div class="d-flex align-items-center">
+                <button type="button" class="btn btn-outline-primary px-4 mr-2 article-preview-btn">Prévisualiser</button>
+                <button type="submit" class="btn btn-primary px-4">{{ isset($article) ? 'Enregistrer les modifications' : 'Publier l’article' }}</button>
+              </div>
             </div>
           </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="articlePreviewModal" tabindex="-1" role="dialog" aria-labelledby="articlePreviewModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+        <div class="modal-content border-0 shadow-lg">
+          <div class="modal-header">
+            <h5 class="modal-title" id="articlePreviewModalLabel">Aperçu de l’article</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body p-4">
+            <div class="mb-3 pb-3 border-bottom">
+              <div class="text-uppercase text-muted small mb-2">Avant publication</div>
+              <h2 id="article-preview-title" class="mb-2"></h2>
+              <div id="article-preview-meta" class="text-muted small"></div>
+            </div>
+            <div id="article-preview-content" class="article-preview-body"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+          </div>
         </div>
       </div>
     </div>

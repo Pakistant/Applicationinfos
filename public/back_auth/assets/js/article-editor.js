@@ -28,5 +28,22 @@
         editor.val(editor.summernote('code'));
       });
     });
+
+    $('.article-preview-btn').on('click', function (event) {
+      event.preventDefault();
+
+      var $form = $(this).closest('form');
+      var $editor = $form.find('.summernote');
+      var content = $editor.length ? $editor.summernote('code') : '';
+      var title = $('#article-title').val() || 'Sans titre';
+      var category = $('#article-category option:selected').text() || 'Sans catégorie';
+      var tags = $('#article-tags').val();
+
+      $editor.val(content);
+      $('#article-preview-title').text(title);
+      $('#article-preview-meta').text(category + (tags ? ' • ' + tags.replace(/,/g, ', ') : ''));
+      $('#article-preview-content').html(content || '<p class="text-muted">Aucun contenu pour l’instant.</p>');
+      $('#articlePreviewModal').modal('show');
+    });
   });
 })(jQuery);

@@ -20,16 +20,16 @@
   @endif
   @if($article->isComment)
     <section class="comments-section">
-      <div class="comments-heading"><div><p class="eyebrow">La conversation</p><h2 class="section-heading">{{ $article->comments->count() }} commentaire(s)</h2></div><span class="comments-heading-icon"><i class="fas fa-comments"></i></span></div>
+      <div class="comments-heading"><div><h2 class="section-heading">Commentaires</h2></div><span class="comments-heading-icon"><i class="fas fa-comments"></i></span></div>
       @forelse($article->comments as $comment)
         <article class="comment-card"><div class="comment-avatar">{{ strtoupper(substr($comment->name, 0, 1)) }}</div><div class="comment-content"><div class="comment-meta"><strong>{{ $comment->name }}</strong><time>{{ $comment->created_at->isoFormat('D MMM YYYY') }}</time></div><p>{{ $comment->message }}</p></div></article>
       @empty
-        <div class="empty-state"><i class="far fa-comment-dots"></i><p>Soyez le premier à partager votre point de vue.</p></div>
+        <div class="empty-state"><p>Aucun commentaire pour le moment. Soyez le premier à commenter !</p></div>
       @endforelse
     </section>
-    <section class="comment-form-card"><div class="comment-form-heading"><span class="contact-icon"><i class="fas fa-pen"></i></span><div><p class="eyebrow">Votre avis compte</p><h2 class="section-heading">Laisser un commentaire</h2></div></div>@if(session('success'))<div class="notice notice-success"><i class="fas fa-check-circle"></i><span>{{ session('success') }}</span></div>@endif
+    <section class="comment-form-card">@if(session('success'))<div class="notice notice-success"><i class="fas fa-check-circle"></i><span>{{ session('success') }}</span></div>@endif
       @if($errors->any())<div class="notice notice-error"><i class="fas fa-exclamation-circle"></i><ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>@endif
-      <form action="{{ route('comment', $article->id) }}" method="POST" class="comment-form">@csrf<div class="comment-field-row"><div class="contact-field"><label for="name">Nom <span class="text-danger">*</span></label><input class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" placeholder="Votre nom" required></div><div class="contact-field"><label for="email">E-mail <span class="text-danger">*</span></label><input class="form-control @error('email') is-invalid @enderror" id="email" name="email" type="email" value="{{ old('email') }}" placeholder="vous@exemple.com" required></div></div><div class="contact-field"><label for="web_site">Site web <span class="optional-label">(facultatif)</span></label><input class="form-control" id="web_site" name="web_site" type="url" value="{{ old('web_site') }}" placeholder="https://votre-site.com"></div><div class="contact-field"><label for="message">Votre commentaire <span class="text-danger">*</span></label><textarea class="form-control" id="message" name="message" rows="5" placeholder="Partagez votre point de vue..." required>{{ old('message') }}</textarea></div><button class="btn-brand" type="submit">Publier le commentaire <i class="fas fa-arrow-right ml-2"></i></button></form>
+      <form action="{{ route('comment', $article->id) }}" method="POST" class="comment-form">@csrf<div class="comment-field-row"><div class="contact-field"><label for="name">Votre nom <span class="text-danger">*</span></label><input class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" placeholder="Votre nom" required></div><div class="contact-field"><label for="email">Votre email <span class="text-danger">*</span></label><input class="form-control @error('email') is-invalid @enderror" id="email" name="email" type="email" value="{{ old('email') }}" placeholder="Votre email" required></div></div><div class="contact-field"><label for="message">Votre commentaire <span class="text-danger">*</span></label><textarea class="form-control" id="message" name="message" rows="5" placeholder="Votre commentaire" required>{{ old('message') }}</textarea></div><button class="btn-brand" type="submit">Publier le commentaire</button></form>
     </section>
   @endif
 
@@ -67,7 +67,46 @@
 
 @push('styles')
 <style>
-  .comments-section { margin-top:38px; }.comments-heading { display:flex; justify-content:space-between; align-items:center; }.comments-heading .section-heading { margin-bottom:0; }.comments-heading-icon { width:42px; height:42px; display:grid; place-items:center; background:#f1f0ff; color:var(--brand); border-radius:12px; }.comment-card { display:flex; gap:14px; padding:18px 0; border-bottom:1px solid var(--line); }.comment-avatar { width:40px; height:40px; flex:0 0 auto; display:grid; place-items:center; border-radius:50%; background:var(--brand); color:#fff; font-weight:800; }.comment-content { min-width:0; }.comment-meta { display:flex; gap:10px; align-items:center; }.comment-meta time { color:var(--muted); font-size:.78rem; }.comment-content p { margin:6px 0 0; color:#475467; white-space:pre-line; }.comment-form-card { margin-top:30px; background:#fff; border:1px solid var(--line); border-radius:20px; padding:28px; }.comment-form-heading { display:flex; gap:13px; align-items:center; margin-bottom:22px; }.comment-form-heading .section-heading { margin-bottom:0; }.comment-form { display:grid; gap:17px; }.comment-field-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }.optional-label { color:var(--muted); font-weight:400; }.comment-form .btn-brand { justify-self:start; }.comments-section .empty-state i { font-size:1.7rem; color:var(--brand); }.comments-section .empty-state p { margin:8px 0 0; }.notice-error ul { margin:0; padding-left:18px; }@media(max-width:560px){.comment-form-card{padding:21px}.comment-field-row{grid-template-columns:1fr}.comment-meta{display:block}.comment-meta time{display:block;margin-top:2px}}
+  .comments-section { margin-top:38px; }.comments-heading { display:flex; justify-content:space-between; align-items:center; }.comments-heading .section-heading { margin-bottom:0; }.comments-heading-icon { width:42px; height:42px; display:grid; place-items:center; background:#f1f0ff; color:var(--brand); border-radius:12px; }.comment-card { display:flex; gap:14px; padding:18px 0; border-bottom:1px solid var(--line); }.comment-avatar { width:40px; height:40px; flex:0 0 auto; display:grid; place-items:center; border-radius:50%; background:var(--brand); color:#fff; font-weight:800; }.comment-content { min-width:0; }.comment-meta { display:flex; gap:10px; align-items:center; }.comment-meta time { color:var(--muted); font-size:.78rem; }.comment-content p { margin:6px 0 0; color:#475467; white-space:pre-line; }
+  .comment-form-card { margin-top:28px; background:transparent; border:0; border-radius:0; padding:0; }
+  .comment-form-heading { display:none; }
+  .comment-form { display:grid; gap:17px; }
+  .comment-field-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .contact-field { display:grid; gap:8px; }
+  .contact-field label { font-size:1.05rem; font-weight:500; color:#232b38; margin:0; }
+  .contact-field .form-control {
+    border:1px solid #d7dbe3 !important;
+    border-radius:6px !important;
+    background:#fff;
+    min-height:46px;
+    box-shadow:none !important;
+  }
+  .contact-field textarea.form-control { min-height:120px; resize:vertical; }
+  .optional-label { color:var(--muted); font-weight:400; }
+  .comment-form .btn-brand {
+    justify-self:stretch;
+    width:100%;
+    background:rgb(79, 70, 229);
+    border:0;
+    border-radius:6px;
+    color:#fff;
+    font-weight:700;
+    font-size:1.08rem;
+    padding:16px 20px;
+    margin-top:4px;
+    box-shadow:none;
+  }
+  .comment-form .btn-brand:hover { background:rgb(67, 58, 200); color:#fff; }
+  .comments-section .empty-state {
+    background:transparent;
+    border:0;
+    padding:14px 0 18px;
+    text-align:left;
+    color:#475467;
+  }
+  .comments-section .empty-state i { display:none; }
+  .comments-section .empty-state p { margin:0; font-size:1.05rem; }
+  .notice-error ul { margin:0; padding-left:18px; }@media(max-width:560px){.comment-form-card{padding:21px}.comment-field-row{grid-template-columns:1fr}.comment-meta{display:block}.comment-meta time{display:block;margin-top:2px}}
   .article-share { display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin:22px 0 30px; padding:14px 18px; background:#fff; border:1px solid var(--line); border-radius:14px; color:var(--muted); font-size:.82rem; font-weight:700; }.article-share-actions { display:flex; gap:8px; }.article-share-actions a,.article-share-actions button { width:34px; height:34px; display:grid; place-items:center; border:0; border-radius:50%; color:#fff; cursor:pointer; transition:transform .2s ease,opacity .2s ease; }.article-share-actions a:hover,.article-share-actions button:hover { color:#fff; opacity:.85; transform:translateY(-2px); }.share-facebook { background:#1877f2; }.share-x { background:#111827; }.share-whatsapp { background:#25d366; }.share-copy { background:var(--brand); }.share-native { background:var(--accent); }.share-feedback { color:#198754; font-size:.75rem; font-weight:600; }.share-feedback:empty { display:none; }
   .related-articles .story-grid { grid-template-columns:repeat(3, minmax(0, 1fr)); gap:16px; }
   .related-articles .story-card { border-radius:16px; }

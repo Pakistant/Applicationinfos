@@ -16,6 +16,16 @@ class Article extends Model
 {
     use HasFactory, HasSlug, Taggable;
 
+    public function getDescriptionAttribute(?string $description): ?string
+    {
+        if ($description === null || !preg_match('/(?:Ã.|Â.|â.)/', $description)) {
+            return $description;
+        }
+
+        $latinBytes = iconv('UTF-8', 'ISO-8859-1//IGNORE', $description);
+        return $latinBytes === false ? $description : mb_convert_encoding($latinBytes, 'UTF-8', 'ISO-8859-1');
+    }
+
     protected $fillable=[
         'title',
         'slug',

@@ -11,7 +11,7 @@ class DetailsController extends Controller
 {
     public function index(String $slug){
 
-        $article = Article::where('slug',$slug)->with('comments')->first();
+        $article = Article::where('slug',$slug)->with(['comments','category','author','tags'])->first();
         
         // Vérifier si l'article existe
         if (!$article) {
@@ -24,12 +24,34 @@ class DetailsController extends Controller
 
         // Récupérer les articles récents pour la sidebar
         $recent_articles = Article::where('isActive',1)
-            ->where('id', '!=', $article->id) // Exclure l'article actuel
+            ->where('id', '!=', $article->id)
             ->orderBy('created_at','DESC')
             ->limit(5)
             ->get();
 
-        return view('Front.details', compact('article', 'recent_articles'));
+        $relatedArticles = Article::where('isActive',1)
+            ->where('id', '!=', $article->id)
+            ->where(function ($query) use ($article) {
+                $query->where('category_id', $article->category_id);
+
+                if ($article->tags->isNotEmpty()) {
+                    $tagNames = $article->tags->pluck('name')->filter()->all();
+                    foreach ($tagNames as $tagName) {
+                        $query->orWhereHas('tags', function ($tagQuery) use ($tagName) {
+                            $tagQuery->where('name', $tagName);
+                        });
+                    }
+                }
+            })
+            ->orderBy('created_at', 'DESC')
+            ->limit(3)
+            ->get();
+
+        if ($relatedArticles->isEmpty()) {
+            $relatedArticles = $recent_articles->take(3);
+        }
+
+        return view('Front.details', compact('article', 'recent_articles', 'relatedArticles'));
     }
 
     public function comment(StoreCommentRequest $request , int $id){
